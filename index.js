@@ -105,11 +105,12 @@ function Keycloak (config, keycloakConfig) {
  */
 Keycloak.prototype.middleware = function (options) {
   if (!options) {
-    options = {logout: '', admin: ''};
+    options = {logout: '', admin: '', logoutRedirect: ''};
   }
 
   options.logout = options.logout || '/logout';
   options.admin = options.admin || '/';
+  options.logoutRedirect = options.logoutRedirect || '/';
 
   var middlewares = [];
 
@@ -117,7 +118,7 @@ Keycloak.prototype.middleware = function (options) {
   middlewares.push(PostAuth(this));
   middlewares.push(Admin(this, options.admin));
   middlewares.push(GrantAttacher(this));
-  middlewares.push(Logout(this, options.logout));
+  middlewares.push(Logout(this, options.logout, options.logoutRedirect));
 
   return middlewares;
 };

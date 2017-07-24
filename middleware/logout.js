@@ -15,7 +15,7 @@
  */
 'use strict';
 
-module.exports = function (keycloak, logoutUrl) {
+module.exports = function (keycloak, logoutUrl, redirectTo) {
   return function logout (request, response, next) {
     if (request.url !== logoutUrl) {
       return next();
@@ -30,7 +30,7 @@ module.exports = function (keycloak, logoutUrl) {
     let host = request.hostname;
     let headerHost = request.headers.host.split(':');
     let port = headerHost[1] || '';
-    let redirectUrl = request.protocol + '://' + host + (port === '' ? '' : ':' + port) + '/';
+    let redirectUrl = request.protocol + '://' + host + (port === '' ? '' : ':' + port) + redirectTo;
     let keycloakLogoutUrl = keycloak.logoutUrl(redirectUrl);
 
     response.redirect(keycloakLogoutUrl);
